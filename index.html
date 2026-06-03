@@ -96,75 +96,92 @@
         <span id="avisos">Sincronizando avisos e imagens da planilha...</span>
     </div>
 
-    <script>
-        let listaImagens = [];
-        let indexImg = 0;
+<script>
+const SHEET_URL =
+'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqT5Y2GsuCp7N5_YShMfOtjy7_RN2YKO_EMlWP1F5Y-13HInQ9b-LlwLdX8oOibw/pub?gid=58425361&single=true&output=csv';
 
-        function atualizarRelogio() {
-            document.getElementById("relogio").innerText = new Date().toLocaleTimeString('pt-BR');
-        }
+const INTERVAL_MS = 10000;
 
-        async function carregarDados() {
-            const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQKRoBv5fndIMC1ygiemJ0iTXYMo-mMFMNY6_iIOLXdrSE9StX6oz-r3Bt0mQCbnDix7WXz9ZdyNsp3/pub?gid=588852718&single=true&output=csv";
+async function fetchMedals() {
+  try {
 
-            try {
-                const resposta = await fetch(urlPlanilha + "&cache=" + new Date().getTime());
-                const csvTexto = await resposta.text();
-                
-                const linhas = csvTexto.split(/\r?\n/).slice(1);
-                let novosAvisos = [];
-                let novasImagens = [];
+    // Mesmo cache-busting do código que funciona
+    const response = await fetch(
+      SHEET_URL + '&cache=' + new Date().getTime()
+    );
 
-                linhas.forEach(linha => {
-                    if (linha.trim()) {
-                        let colunas = linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                        
-                        let aviso = colunas[0] ? colunas[0].replace(/"/g, "").trim() : "";
-                        if (aviso) novosAvisos.push(aviso);
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
 
-                        let imgUrl = colunas[1] ? colunas[1].replace(/"/g, "").trim() : "";
-                        if (imgUrl && imgUrl.startsWith("http")) {
-                            novasImagens.push(imgUrl);
-                        }
-                    }
-                });
+    const csvText = await response.text();
 
-                if (novosAvisos.length > 0) {
-                    document.getElementById("avisos").innerText = novosAvisos.join("  •  ");
-                }
+    const rows = csvText
+      .split(/\r?\n/)
+      .filter(row => row.trim());
 
-                if (novasImagens.length > 0) {
-                    listaImagens = novasImagens;
-                    const imgElemento = document.getElementById("slide");
-                    if (!imgElemento.src || imgElemento.src === window.location.href) {
-                        trocarImagem();
-                    }
-                }
+    if (rows.length < 2) {
+      throw new Error('Planilha sem dados');
+    }
 
-            } catch (erro) {
-                console.error("Erro ao sincronizar:", erro);
-            }
-        }
+    // Pega apenas a primeira linha de dados
+    const cols = rows[1].split(
+      /,(?=(?:(?:[^"]*"){2})*[^"]*$)/
+    );
 
-        function trocarImagem() {
-            const imgElemento = document.getElementById("slide");
-            if (listaImagens.length > 0) {
-                imgElemento.style.opacity = 0; 
-                setTimeout(() => {
-                    imgElemento.src = listaImagens[indexImg];
-                    imgElemento.style.opacity = 1; 
-                    indexImg = (indexImg + 1) % listaImagens.length;
-                }, 800);
-            }
-        }
+    const gold = parseInt(
+      (cols[0] || '').replace(/"/g, '').trim(),
+      10
+    ) || 0;
 
-        window.onload = () => {
-            atualizarRelogio();
-            setInterval(atualizarRelogio, 1000);
-            carregarDados();
-            setInterval(carregarDados, 60000);
-            setInterval(trocarImagem, 20000);
-        };
-    </script>
+    const silver = parseInt(
+      (cols[1] || '').replace(/"/g, '').trim(),
+      10
+    ) || 0;
+
+    const bronze = parseInt(
+      (cols[2] || '').replace(/"/g, '').trim(),
+      10
+    ) || 0;
+
+    updateCount('gold', gold);
+    updateCount('silver', silver);
+    updateCount('bronze', bronze);
+
+    document.getElementById('status').textContent =
+      'Atualizado às ' +
+      new Date().toLocaleTimeString('pt-BR') +
+      ' | 🥇 ' + gold +
+      ' | 🥈 ' + silver +
+      ' | 🥉 ' + bronze;
+
+  } catch (e) {
+    console.error(e);
+
+    document.getElementById('status').textContent =
+      'Erro: ' + e.message;
+  }
+}
+
+function updateCount(id, value) {
+  const el = document.getElementById(id);
+  const current = parseInt(el.textContent, 10) || 0;
+
+  if (current !== value) {
+    el.textContent = value;
+
+    el.classList.remove('bump');
+    void el.offsetWidth;
+    el.classList.add('bump');
+
+    setTimeout(() => {
+      el.classList.remove('bump');
+    }, 400);
+  }
+}
+
+fetchMedals();
+setInterval(fetchMedals, INTERVAL_MS);
+</script>
 </body>
 </html>
