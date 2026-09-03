@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Institucional — Alef Peretz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:   #021c34;
+    --navy-base:   #032b50;
+    --navy-light:  #0c4a7f;
+    --gold:        #e8b649;
+    --white:       #ffffff;
+    --white-dim:   rgba(255,255,255,0.68);
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin: 0;
+    height: 100%;
+    background: var(--navy-deep);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+
+  body{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  /* ---------- HEADER ---------- */
+  #topo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 56px 22px;
+    background: var(--navy-deep);
+    border-bottom: 1px solid rgba(232,182,73,0.25);
+  }
+
+  #marca{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  #marca .escola{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: 0.2px;
+  }
+
+  #marca .ciclo{
+    font-size: 15px;
+    color: var(--white-dim);
+    font-weight: 500;
+  }
+
+  #relogio-bloco{
+    text-align: right;
+  }
+
+  #relogio{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 64px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  #data{
+    margin-top: 6px;
+    font-size: 15px;
+    color: var(--white-dim);
+    text-transform: capitalize;
+  }
+
+  /* ---------- CONTEÚDO ---------- */
+  #conteudo{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 64px;
+    min-height: 0;
+    position: relative;
+  }
+
+  #moldura{
+    position: relative;
+    height: 100%;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background: var(--navy-base);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    padding: 14px;
+    border: 1px solid rgba(232,182,73,0.35);
+  }
+
+  #slide{
+    max-height: 100%;
+    max-width: 100%;
+    display: block;
+    border-radius: 12px;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+
+  #slide.visivel{
+    opacity: 1;
+  }
+
+  #placeholder{
+    color: var(--white-dim);
+    font-size: 20px;
+    padding: 40px;
+  }
+
+  #indicadores{
+    position: absolute;
+    bottom: -34px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+  }
+
+  .ponto{
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .ponto.ativo{
+    background: var(--gold);
+    transform: scale(1.25);
+  }
+
+  /* ---------- RODAPÉ / AVISOS ---------- */
+  #rodape{
+    display: flex;
+    align-items: stretch;
+    background: var(--navy-deep);
+    border-top: 1px solid rgba(232,182,73,0.25);
+    height: 78px;
+  }
+
+  #rotulo-aviso{
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 32px;
+    background: var(--gold);
+    color: var(--navy-deep);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+  }
+
+  #rotulo-aviso .ponto-vivo{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--navy-deep);
+  }
+
+  #faixa-avisos{
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  #avisos{
+    display: inline-flex;
+    white-space: nowrap;
+    padding-left: 100%;
+    animation: rolar 28s linear infinite;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  #avisos span.separador{
+    color: var(--gold);
+    margin: 0 28px;
+  }
+
+  @keyframes rolar{
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    #avisos{ animation: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="topo">
+    <div id="marca">
+      <div class="escola">Alef Peretz</div>
+      <div class="ciclo">Ciclo 2</div>
+    </div>
+    <div id="relogio-bloco">
+      <div id="relogio">00:00:00</div>
+      <div id="data">—</div>
+    </div>
+  </div>
+
+  <div id="conteudo">
+    <div id="moldura">
+      <img id="slide" alt="Conteúdo do painel">
+      <div id="placeholder">Carregando conteúdo…</div>
+      <div id="indicadores"></div>
+    </div>
+  </div>
+
+  <div id="rodape">
+    <div id="rotulo-aviso"><span class="ponto-vivo"></span>Avisos</div>
+    <div id="faixa-avisos">
+      <div id="avisos">Sincronizando avisos…</div>
+    </div>
+  </div>
+
+<script>
+  // ===== CONFIGURAÇÃO =====
+  const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR40SMxKB7OdAQgPXN7iLyyQeavVlW2Ycew2F1IwyN33NlOF4oGn6vFqiz0TuQcCrcgDqMj8RRzfQjz/pub?gid=0&single=true&output=csv';
+  const INTERVALO_TROCA_SLIDE = 10000;   // troca de imagem
+  const INTERVALO_ATUALIZA_PLANILHA = 30000; // busca novos dados na planilha
+
+  let slides = [];       // [{img, aviso}]
+  let slideAtual = 0;
+  let slideTimer = null;
+
+  // ===== RELÓGIO =====
+  function atualizarRelogio(){
+    const agora = new Date();
+    document.getElementById('relogio').textContent =
+      agora.toLocaleTimeString('pt-BR', { hour12: false });
+    document.getElementById('data').textContent =
+      agora.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
+  }
+  atualizarRelogio();
+  setInterval(atualizarRelogio, 1000);
+
+  // ===== PARSER DE CSV (respeita vírgulas dentro de aspas) =====
+  function parseCSV(texto){
+    const linhas = texto.split(/\r?\n/).filter(l => l.trim().length > 0);
+    return linhas.slice(1).map(linha => {
+      const colunas = linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+      const img = (colunas[0] || '').replace(/^"|"$/g, '').trim();
+      const aviso = (colunas[1] || '').replace(/^"|"$/g, '').trim();
+      return { img, aviso };
+    }).filter(item => item.img);
+  }
+
+  // ===== BUSCAR PLANILHA =====
+  async function buscarDados(){
+    try{
+      const resp = await fetch(SHEET_URL + '&cache=' + Date.now());
+      if(!resp.ok) throw new Error('HTTP ' + resp.status);
+      const csv = await resp.text();
+      const novos = parseCSV(csv);
+
+      if(novos.length === 0){
+        document.getElementById('placeholder').style.display = 'block';
+        document.getElementById('placeholder').textContent = 'Nenhuma imagem cadastrada na planilha.';
+        return;
+      }
+
+      slides = novos;
+      montarIndicadores();
+      atualizarAvisos();
+
+      // se ainda não tem slide rodando, começa agora
+      if(slideTimer === null){
+        mostrarSlide(0);
+        slideTimer = setInterval(proximoSlide, INTERVALO_TROCA_SLIDE);
+      } else if(slideAtual >= slides.length){
+        slideAtual = 0;
+      }
+    } catch(e){
+      console.error('Erro ao buscar planilha:', e);
+    }
+  }
+
+  // ===== SLIDES =====
+  function mostrarSlide(indice){
+    if(!slides[indice]) return;
+    const imgEl = document.getElementById('slide');
+    const placeholder = document.getElementById('placeholder');
+
+    imgEl.classList.remove('visivel');
+
+    const nova = new Image();
+    nova.onload = () => {
+      imgEl.src = slides[indice].img;
+      placeholder.style.display = 'none';
+      requestAnimationFrame(() => imgEl.classList.add('visivel'));
+    };
+    nova.onerror = () => {
+      placeholder.style.display = 'block';
+      placeholder.textContent = 'Não foi possível carregar a imagem.';
+    };
+    nova.src = slides[indice].img;
+
+    slideAtual = indice;
+    atualizarIndicadores();
+  }
+
+  function proximoSlide(){
+    if(slides.length <= 1) return;
+    mostrarSlide((slideAtual + 1) % slides.length);
+  }
+
+  function montarIndicadores(){
+    const container = document.getElementById('indicadores');
+    container.innerHTML = '';
+    if(slides.length <= 1) return;
+    slides.forEach((_, i) => {
+      const ponto = document.createElement('div');
+      ponto.className = 'ponto' + (i === slideAtual ? ' ativo' : '');
+      container.appendChild(ponto);
+    });
+  }
+
+  function atualizarIndicadores(){
+    document.querySelectorAll('#indicadores .ponto').forEach((p, i) => {
+      p.classList.toggle('ativo', i === slideAtual);
+    });
+  }
+
+  // ===== AVISOS =====
+  function atualizarAvisos(){
+    const textos = slides.map(s => s.aviso).filter(a => a);
+    const unicos = [...new Set(textos)];
+    const el = document.getElementById('avisos');
+
+    if(unicos.length === 0){
+      el.innerHTML = 'Nenhum aviso no momento.';
+      return;
+    }
+
+    el.innerHTML = unicos
+      .map(t => t)
+      .join('<span class="separador">•</span>');
+  }
+
+  // ===== INICIALIZAÇÃO =====
+  buscarDados();
+  setInterval(buscarDados, INTERVALO_ATUALIZA_PLANILHA);
+</script>
+</body>
+</html>
