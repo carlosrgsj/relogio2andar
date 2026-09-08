@@ -218,7 +218,6 @@
   <div id="topo">
     <div id="marca">
       <div class="escola">Alef Peretz</div>
-      <div class="ciclo">Ensino Médio</div>
     </div>
     <div id="relogio-bloco">
       <div id="relogio">00:00:00</div>
@@ -276,7 +275,10 @@
   // ===== BUSCAR PLANILHA =====
   async function buscarDados(){
     try{
-      const resp = await fetch(SHEET_URL + '&cache=' + Date.now());
+      const resp = await fetch(SHEET_URL + '&cache=' + Date.now(), {
+        cache: 'no-store',
+        headers: { 'Pragma': 'no-cache', 'Cache-Control': 'no-cache' }
+      });
       if(!resp.ok) throw new Error('HTTP ' + resp.status);
       const csv = await resp.text();
       const novos = parseCSV(csv);
