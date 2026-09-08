@@ -218,6 +218,7 @@
   <div id="topo">
     <div id="marca">
       <div class="escola">Alef Peretz</div>
+      <div class="ciclo">Ciclo 2</div>
     </div>
     <div id="relogio-bloco">
       <div id="relogio">00:00:00</div>
@@ -244,7 +245,7 @@
   // ===== CONFIGURAÇÃO =====
   const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1cbyGmbSECBWwbFDHqshap5RaaugkQ19VpPZkpvh5Md0/export?format=csv&gid=0';
   const INTERVALO_TROCA_SLIDE = 10000;   // troca de imagem
-  const INTERVALO_ATUALIZA_PLANILHA = 30000; // busca novos dados na planilha
+  const INTERVALO_ATUALIZA_PLANILHA = 10000; // busca novos dados na planilha
 
   let slides = [];       // [{img, aviso}]
   let slideAtual = 0;
@@ -275,7 +276,8 @@
   // ===== BUSCAR PLANILHA =====
   async function buscarDados(){
     try{
-      const resp = await fetch(SHEET_URL + '&cache=' + Date.now(), {
+      const buster = Date.now() + '-' + Math.random().toString(36).slice(2);
+      const resp = await fetch(SHEET_URL + '&cache=' + buster, {
         cache: 'no-store',
         headers: { 'Pragma': 'no-cache', 'Cache-Control': 'no-cache' }
       });
