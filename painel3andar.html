@@ -38,26 +38,27 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 28px 56px 22px;
+    padding: 12px 40px;
     background: var(--navy-deep);
     border-bottom: 1px solid rgba(232,182,73,0.25);
+    flex-shrink: 0;
   }
 
   #marca{
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
   }
 
   #marca .escola{
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: 30px;
+    font-size: 20px;
     letter-spacing: 0.2px;
   }
 
   #marca .ciclo{
-    font-size: 15px;
+    font-size: 12px;
     color: var(--white-dim);
     font-weight: 500;
   }
@@ -69,14 +70,14 @@
   #relogio{
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 600;
-    font-size: 64px;
+    font-size: 36px;
     line-height: 1;
     font-variant-numeric: tabular-nums;
   }
 
   #data{
-    margin-top: 6px;
-    font-size: 15px;
+    margin-top: 3px;
+    font-size: 12px;
     color: var(--white-dim);
     text-transform: capitalize;
   }
@@ -87,7 +88,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 36px 64px;
+    padding: 14px 24px;
     min-height: 0;
     position: relative;
   }
@@ -99,10 +100,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 20px;
+    border-radius: 16px;
     background: var(--navy-base);
     box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-    padding: 14px;
+    padding: 6px;
     border: 1px solid rgba(232,182,73,0.35);
   }
 
@@ -128,7 +129,7 @@
 
   #indicadores{
     position: absolute;
-    bottom: -34px;
+    bottom: -20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -154,20 +155,21 @@
     align-items: stretch;
     background: var(--navy-deep);
     border-top: 1px solid rgba(232,182,73,0.25);
-    height: 78px;
+    height: 52px;
+    flex-shrink: 0;
   }
 
   #rotulo-aviso{
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 0 32px;
+    gap: 8px;
+    padding: 0 24px;
     background: var(--gold);
     color: var(--navy-deep);
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 14px;
     letter-spacing: 0.3px;
   }
 
@@ -191,14 +193,14 @@
     white-space: nowrap;
     padding-left: 100%;
     animation: rolar 28s linear infinite;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 500;
     color: var(--white);
   }
 
   #avisos span.separador{
     color: var(--gold);
-    margin: 0 28px;
+    margin: 0 22px;
   }
 
   @keyframes rolar{
